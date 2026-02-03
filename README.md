@@ -1,5 +1,3 @@
-# Resumate AI
-
 <img width="1536" height="1024" alt="ChatGPT Image Feb 3, 2026, 11_47_48 PM" src="https://github.com/user-attachments/assets/cc73a2da-a013-4697-bc46-4c9498fdbc14" />
 
 
