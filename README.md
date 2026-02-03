@@ -4,7 +4,7 @@
 
 ## Technology Stack
 
-This scaffold provides a robust foundation built with:
+The core foundation is built with:
 
 ### Core Framework
 - ** Next.js 16** - The React framework for production with App Router
