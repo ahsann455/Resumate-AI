@@ -230,6 +230,37 @@ async function evaluateWithGROQ(requestId: string, jobRole: string, cvText: stri
 
     const { baseUrl, apiKey } = await loadConfig();
 
+    // If running locally with a placeholder key or when the GROQ host is unreachable,
+    // return a deterministic mock response to avoid failing development runs.
+    const isPlaceholderKey = !!apiKey && apiKey.startsWith('your_');
+    const isDev = process.env.NODE_ENV !== 'production';
+
+    function mockResponse(): CVEvaluationMetrics {
+      const sample = {
+        roleRelevance: 75,
+        skillsMatch: 70,
+        experienceFit: 65,
+        educationFit: 80,
+        atsKeywordMatch: 72,
+        industryAlignment: 70,
+        strengths: ['Clear role fit', 'Relevant skills', 'Good education'],
+        weaknesses: ['Limited senior experience', 'Missing one key tool'],
+        recommendations: ['Add more senior-level examples', 'Highlight tool X experience'],
+        matchedSkills: ['JavaScript', 'TypeScript', 'React'],
+        missingSkills: ['GraphQL'],
+        summary: `Mock evaluation for ${jobRole}. This is a local fallback response.`,
+        industryMatch: true,
+        isMatch: true,
+        overallScore: 74,
+      } as unknown as CVEvaluationMetrics;
+      return sample;
+    }
+
+    if (isDev && isPlaceholderKey) {
+      console.warn(`[${requestId}] Using mock GROQ AI response (placeholder API key detected).`);
+      return mockResponse();
+    }
+
     const url = `${baseUrl.replace(/\/$/, '')}/chat/completions`;
     const headers: Record<string, string> = {
       'Content-Type': 'application/json',
@@ -242,7 +273,30 @@ async function evaluateWithGROQ(requestId: string, jobRole: string, cvText: stri
       messages: [{ role: 'user', content: prompt }],
     };
 
-    const resp = await fetch(url, { method: 'POST', headers, body: JSON.stringify(body) });
+    let resp: Response;
+    try {
+      resp = await fetch(url, { method: 'POST', headers, body: JSON.stringify(body) });
+    } catch (err: any) {
+      console.error(`[${requestId}] Fetch error:`, err);
+      // Detect network/DNS errors even when wrapped in a TypeError.cause chain.
+      function isHostUnreachable(e: any): boolean {
+        let cur = e;
+        for (let i = 0; i < 6 && cur; i++) {
+          if (cur?.code === 'ENOTFOUND' || cur?.errno === -3008) return true;
+          if (typeof cur?.message === 'string' && cur.message.includes('getaddrinfo ENOTFOUND')) return true;
+          cur = cur.cause;
+        }
+        return false;
+      }
+
+      if (isDev && isHostUnreachable(err)) {
+        console.warn(`[${requestId}] GROQ host unreachable; returning mock response for development.`);
+        return mockResponse();
+      }
+
+      throw new AIEvaluationError('fetch failed');
+    }
+
     if (!resp.ok) {
       const text = await resp.text();
       throw new AIEvaluationError(`API request failed with status ${resp.status}: ${text}`);
