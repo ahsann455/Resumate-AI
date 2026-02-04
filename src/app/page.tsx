@@ -146,7 +146,7 @@ export default function CVEvaluationPage() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-12 max-w-3xl" suppressHydrationWarning={true}>
+    <div className="container mx-auto px-4 pt-6 pb-12 max-w-3xl" suppressHydrationWarning={true}>
 
       {/* Hero Section */}
       {!evaluationResult && (

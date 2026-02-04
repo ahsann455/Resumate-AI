@@ -84,7 +84,7 @@ export default function RootLayout({
       >
         <NextAuthSessionProvider>
           <Navbar />
-          <main className="flex-1 mt-20">
+          <main className="flex-1 mt-16">
             {children}
           </main>
           <Footer />

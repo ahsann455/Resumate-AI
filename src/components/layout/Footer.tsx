@@ -39,7 +39,7 @@ export function Footer() {
                         </p>
                     </div>
 
-                    <div className="lg:col-span-3 grid grid-cols-3 gap-6">
+                    <div className="lg:col-span-3 grid grid-cols-3 gap-10 md:text-right ml-auto">
                         {Object.entries(footerLinks).map(([category, links]) => (
                             <div key={category}>
                                 <h3 className="font-medium text-xs uppercase tracking-wider mb-4 text-white/50">{category}</h3>
