@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import { Separator } from '@/components/ui/separator';
 
 export function Footer() {
     const currentYear = new Date().getFullYear();
@@ -27,30 +26,29 @@ export function Footer() {
 
 
     return (
-        <footer className="bg-black border-t border-white/10 pt-6 pb-2">
-            <div className="container mx-auto px-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-6 mb-6">
+        <footer className="bg-black border-t border-white/5 py-10">
+            <div className="container mx-auto px-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
                     <div className="lg:col-span-2 space-y-3">
-                        <Link href="/" className="flex items-center gap-2">
-                            <img src="/resumate-logo.png" alt="Resumate AI" className="w-8 h-8 object-contain" />
-                            <span className="font-bold text-lg text-white">Resumate AI</span>
+                        <Link href="/" className="inline-block">
+                            <span className="font-semibold text-base text-white">Resumate AI</span>
                         </Link>
-                        <p className="text-xs text-white/60 leading-relaxed max-w-xs">
-                            Intelligent resume analysis and CV optimization powered by advanced AI.
-                            Land your dream job with data-driven insights.
+                        <p className="text-xs text-white/40 leading-relaxed max-w-xs">
+                            Intelligent resume analysis powered by AI.
+                            Get data-driven insights to land your dream job.
                         </p>
                     </div>
 
-                    <div className="lg:col-span-4 grid grid-cols-2 sm:grid-cols-3 gap-6">
+                    <div className="lg:col-span-3 grid grid-cols-3 gap-6">
                         {Object.entries(footerLinks).map(([category, links]) => (
                             <div key={category}>
-                                <h3 className="font-semibold text-white text-xs mb-3">{category}</h3>
-                                <ul className="space-y-2">
+                                <h3 className="font-medium text-xs uppercase tracking-wider mb-4 text-white/50">{category}</h3>
+                                <ul className="space-y-2.5">
                                     {links.map((link) => (
                                         <li key={link.name}>
                                             <Link
                                                 href={link.href}
-                                                className="text-xs text-white/60 hover:text-white transition-colors"
+                                                className="text-xs text-white/40 hover:text-white transition-colors"
                                             >
                                                 {link.name}
                                             </Link>
@@ -62,16 +60,6 @@ export function Footer() {
                     </div>
                 </div>
 
-                <Separator className="bg-white/10" />
-
-                <div className="flex flex-col md:flex-row items-center justify-between gap-4 mt-8 pt-8 text-xs text-white/40">
-                    <p>&copy; {currentYear} Resumate AI. All rights reserved.</p>
-                    <div className="flex gap-6">
-                        <Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link>
-                        <Link href="/terms" className="hover:text-white transition-colors">Terms of Service</Link>
-                        <Link href="/cookies" className="hover:text-white transition-colors">Cookie Settings</Link>
-                    </div>
-                </div>
             </div>
         </footer>
     );

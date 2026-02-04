@@ -8,12 +8,12 @@ export default function PricingPage() {
         {
             name: "Free",
             price: "$0",
-            period: "/month",
-            description: "Essential tools for casual job seekers.",
+            period: "/mo",
+            description: "Essential tools for job seekers.",
             features: [
-                "3 Resume Scans per month",
-                "Basic ATS Compliance Check",
-                "Standard Formatting Tips",
+                "3 Resume Scans / month",
+                "Basic ATS Check",
+                "Standard Tips",
                 "Email Support"
             ],
             cta: "Get Started",
@@ -22,12 +22,12 @@ export default function PricingPage() {
         {
             name: "Pro",
             price: "$29",
-            period: "/quarter",
+            period: "/qtr",
             description: "Advanced analytics for serious candidates.",
             features: [
-                "Unlimited Resume Scans",
-                "Deep Keyword Gap Analysis",
-                "Job Description Matching",
+                "Unlimited Scans",
+                "Keyword Gap Analysis",
+                "Job Matching",
                 "Cover Letter Generator",
                 "Priority Support"
             ],
@@ -38,15 +38,15 @@ export default function PricingPage() {
             name: "Enterprise",
             price: "Custom",
             period: "",
-            description: "For career coaches and organizations.",
+            description: "For teams and organizations.",
             features: [
-                "Bulk Resume Processing",
-                "Team Management Dashboard",
+                "Bulk Processing",
+                "Team Dashboard",
                 "API Access",
                 "White-label Reports",
-                "Dedicated Account Manager"
+                "Account Manager"
             ],
-            cta: "Contact Sales",
+            cta: "Contact",
             highlight: false
         }
     ];
@@ -54,54 +54,49 @@ export default function PricingPage() {
     return (
         <SEOPageWrapper
             title="Pricing"
-            description="Simple, transparent pricing for your career growth."
+            description="Simple, transparent pricing."
         >
-            <div className="max-w-6xl mx-auto space-y-10">
+            <div className="max-w-2xl mx-auto space-y-8">
 
-                {/* Header */}
-                <div className="space-y-3 text-center max-w-2xl mx-auto">
-                    <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-white">
-                        Invest in Your <br />
-                        <span className="text-white/40">Future Career.</span>
-                    </h1>
-                    <p className="text-xs text-white/60 leading-relaxed">
-                        Transparent pricing with no hidden fees. Start for free, upgrade when you're ready to land the job.
+                <div className="space-y-3 text-center">
+                    <h2>Invest in Your Career</h2>
+                    <p>
+                        Transparent pricing. Start free, upgrade when ready.
                     </p>
                 </div>
 
-                {/* Pricing Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="grid grid-cols-3 gap-3">
                     {plans.map((plan, index) => (
                         <div
                             key={index}
                             className={`
-                relative p-5 rounded-xl border transition-all duration-300 flex flex-col
-                ${plan.highlight
-                                    ? "bg-white text-black border-white scale-100 z-10 shadow-2xl shadow-white/10"
-                                    : "bg-white/5 border-white/10 text-white hover:border-white/20"}
-              `}
+                                p-4 rounded-lg border transition-all flex flex-col
+                                ${plan.highlight
+                                    ? "bg-white text-black border-white"
+                                    : "bg-white/[0.02] border-white/5 text-white hover:border-white/10"}
+                            `}
                         >
-                            <div className="mb-4 space-y-2">
-                                <h3 className={`text-sm font-bold ${plan.highlight ? "text-black/60" : "text-white/60"}`}>
+                            <div className="mb-4 space-y-1.5">
+                                <h3 className="text-[10px] font-medium uppercase tracking-wider ${plan.highlight ? 'text-black/50' : 'text-white/40'}">
                                     {plan.name}
                                 </h3>
-                                <div className="flex items-baseline gap-1">
-                                    <span className="text-2xl font-bold tracking-tight">{plan.price}</span>
-                                    <span className={`text-[10px] ${plan.highlight ? "text-black/60" : "text-white/60"}`}>
+                                <div className="flex items-baseline gap-0.5">
+                                    <span className="text-xl font-bold">{plan.price}</span>
+                                    <span className={`text-[10px] ${plan.highlight ? "text-black/50" : "text-white/40"}`}>
                                         {plan.period}
                                     </span>
                                 </div>
-                                <p className={`text-[10px] leading-relaxed ${plan.highlight ? "text-black/60" : "text-white/60"}`}>
+                                <p className={`text-[10px] leading-relaxed ${plan.highlight ? "text-black/60" : "text-white/50"}`}>
                                     {plan.description}
                                 </p>
                             </div>
 
-                            <div className="flex-1 mb-8">
-                                <ul className="space-y-4">
+                            <div className="flex-1 mb-4">
+                                <ul className="space-y-2">
                                     {plan.features.map((feature, i) => (
-                                        <li key={i} className="flex items-start gap-3 text-sm">
-                                            <Check className={`w-4 h-4 mt-0.5 ${plan.highlight ? "text-black" : "text-white"}`} />
-                                            <span className={plan.highlight ? "text-black/80" : "text-white/80"}>
+                                        <li key={i} className="flex items-start gap-2 text-xs">
+                                            <Check className={`w-3 h-3 mt-0.5 ${plan.highlight ? "text-black" : "text-white/50"}`} />
+                                            <span className={plan.highlight ? "text-black/70" : "text-white/60"}>
                                                 {feature}
                                             </span>
                                         </li>
@@ -112,11 +107,11 @@ export default function PricingPage() {
                             <Button
                                 asChild
                                 className={`
-                  h-12 w-full font-bold text-sm
-                  ${plan.highlight
+                                    h-8 w-full font-semibold text-xs
+                                    ${plan.highlight
                                         ? "bg-black text-white hover:bg-black/80"
                                         : "bg-white text-black hover:bg-white/90"}
-                `}
+                                `}
                             >
                                 <Link href={plan.price === "Custom" ? "/contact" : "/"}>
                                     {plan.cta}

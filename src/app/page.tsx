@@ -1,15 +1,14 @@
 'use client';
 
 import { useState } from 'react';
-import { Upload, FileText, AlertCircle, CheckCircle, Loader2, Sparkles, ArrowRight, Zap, Target, Award, ChevronDown } from 'lucide-react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Upload, FileText, AlertCircle, CheckCircle, Loader2, Sparkles, Target } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Separator } from '@/components/ui/separator';
 
 interface CVEvaluationResult {
   overallScore: number;
@@ -117,6 +116,7 @@ export default function CVEvaluationPage() {
 
       if (data.success && data.result) {
         setEvaluationResult(data.result);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       } else {
         throw new Error(data.error || 'No evaluation result received');
       }
@@ -128,55 +128,63 @@ export default function CVEvaluationPage() {
   };
 
   const getScoreColor = (score: number) => {
-    if (score >= 80) return 'text-emerald-500';
-    if (score >= 60) return 'text-amber-500';
-    return 'text-red-500';
+    if (score >= 70) return 'text-emerald-400';
+    if (score >= 50) return 'text-amber-400';
+    return 'text-red-400';
+  };
+
+  const getScoreBgColor = (score: number) => {
+    if (score >= 70) return 'bg-emerald-500/20 border-emerald-500/30';
+    if (score >= 50) return 'bg-amber-500/20 border-amber-500/30';
+    return 'bg-red-500/20 border-red-500/30';
+  };
+
+  const getProgressColor = (score: number) => {
+    if (score >= 70) return 'bg-emerald-500';
+    if (score >= 50) return 'bg-amber-500';
+    return 'bg-red-500';
   };
 
   return (
-
-    <div className="container mx-auto px-4 py-8 max-w-5xl" suppressHydrationWarning={true}>
+    <div className="container mx-auto px-4 py-12 max-w-3xl" suppressHydrationWarning={true}>
 
       {/* Hero Section */}
       {!evaluationResult && (
-        <div className="flex flex-col items-start text-left space-y-4 mb-8 animate-fadeInUp">
-          <div className="space-y-3 max-w-2xl mb-10">
-            <h1 className="text-2xl md:text-4xl font-extrabold tracking-tight leading-tight mb-6">
-              Analyze Your Resume <br />
-              <span className="text-white underline decoration-white/30 underline-offset-8">
-                with AI Intelligence.
-              </span>
+        <div className="flex flex-col items-center text-center space-y-6 mb-10 animate-fadeInUp">
+          <div className="space-y-3 max-w-lg">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight leading-[1.1]">
+              Analyze Your Resume
+              <span className="text-white/40 block mt-2 text-sm md:text-base font-medium">with AI Intelligence.</span>
             </h1>
-            <p className="text-base text-white/60 leading-relaxed">
+            <p className="text-sm text-white/50 leading-relaxed">
               Get instant, data-driven insights on how your resume matches job requirements.
-              Optimize your CV to pass ATS filters and land more interviews.
             </p>
           </div>
 
-          {/* Input Section */}
-          <Card className="w-full max-w-md bg-white/5 border-white/10 backdrop-blur-sm shadow-2xl self-center">
-            <CardContent className="pt-6 space-y-4">
+          {/* Input Card */}
+          <Card className="w-full max-w-md bg-white/[0.02] border-white/5 backdrop-blur-sm">
+            <CardContent className="pt-6 space-y-5">
               <div className="space-y-2 text-left">
-                <Label htmlFor="job-role" className="text-white">Target Job Role</Label>
+                <Label htmlFor="job-role" className="text-xs text-white/60 font-medium">Target Job Role</Label>
                 <Input
                   id="job-role"
                   placeholder="e.g., Senior Software Engineer"
                   value={jobRole}
                   onChange={(e) => setJobRole(e.target.value)}
                   disabled={isEvaluating}
-                  className="bg-black/20 border-white/10 text-white placeholder:text-white/30 focus:border-indigo-500/50"
+                  className="bg-black/40 border-white/10 text-white placeholder:text-white/20 focus:border-white/20 h-10 text-sm"
                 />
               </div>
 
               <div className="space-y-2 text-left">
-                <Label className="text-white">Upload CV (PDF/DOCX)</Label>
+                <Label className="text-xs text-white/60 font-medium">Upload CV</Label>
                 <label className="block group cursor-pointer">
-                  <div className="border-2 border-dashed border-white/10 rounded-xl p-6 text-center group-hover:border-indigo-500/30 group-hover:bg-indigo-500/5 transition-all duration-300">
-                    <Upload className="h-8 w-8 mx-auto mb-3 text-white/40 group-hover:text-indigo-400 transition-colors" />
-                    <p className="text-sm text-white/80 font-medium">
-                      {file ? file.name : 'Click to upload or drag & drop'}
+                  <div className="border border-dashed border-white/10 rounded-lg p-5 text-center group-hover:border-white/20 group-hover:bg-white/[0.02] transition-all">
+                    <Upload className="h-6 w-6 mx-auto mb-2 text-white/30 group-hover:text-white/50 transition-colors" />
+                    <p className="text-xs text-white/60 font-medium">
+                      {file ? file.name : 'Click to upload'}
                     </p>
-                    <p className="text-xs text-white/40 mt-1">Supported formats: PDF, DOC, DOCX</p>
+                    <p className="text-[10px] text-white/30 mt-1">PDF, DOC, DOCX</p>
                   </div>
                   <Input
                     type="file"
@@ -189,37 +197,35 @@ export default function CVEvaluationPage() {
               </div>
 
               {error && (
-                <Alert variant="destructive" className="bg-red-500/10 border-red-500/20 text-red-200">
+                <Alert variant="destructive" className="bg-white/5 border-white/10 text-white/70 py-3">
                   <AlertCircle className="h-4 w-4" />
-                  <AlertTitle>Error</AlertTitle>
-                  <AlertDescription>{error}</AlertDescription>
+                  <AlertTitle className="text-xs">Error</AlertTitle>
+                  <AlertDescription className="text-xs">{error}</AlertDescription>
                 </Alert>
               )}
 
               <Button
                 onClick={handleEvaluate}
                 disabled={isEvaluating || !jobRole.trim() || !file}
-                className="w-full bg-white text-black hover:bg-white/90 font-bold h-11 text-base shadow-lg shadow-indigo-500/10 transition-all"
+                className="w-full bg-white text-black hover:bg-white/90 font-semibold h-10 text-sm"
               >
                 {isEvaluating ? (
                   <>
-                    <Loader2 className="h-5 w-5 mr-2 animate-spin" />
-                    Analyzing your profile...
+                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                    Analyzing...
                   </>
                 ) : (
-                  <>
-                    Analyze Resume Now
-                  </>
+                  'Analyze Resume'
                 )}
               </Button>
 
               {isEvaluating && (
-                <div className="space-y-2 pt-2">
-                  <div className="flex justify-between text-xs text-white/40">
-                    <span>Processing...</span>
+                <div className="space-y-1.5">
+                  <div className="flex justify-between text-xs text-white/30">
+                    <span>Processing</span>
                     <span>{progress}%</span>
                   </div>
-                  <Progress value={progress} className="h-1 bg-white/10" />
+                  <Progress value={progress} className="h-1 bg-white/5" />
                 </div>
               )}
             </CardContent>
@@ -227,39 +233,30 @@ export default function CVEvaluationPage() {
         </div>
       )}
 
-      {/* Landing Features (Only when not evaluating) */}
+      {/* Insights */}
       {!evaluationResult && (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-20 mb-12">
+        <div className="grid grid-cols-3 gap-4 mt-12">
           {[
-            {
-              title: "Instant Feedback",
-              desc: "Get actionable analysis in seconds, not days."
-            },
-            {
-              title: "Job Matching",
-              desc: "See exactly how well you fit specific job descriptions."
-            },
-            {
-              title: "ATS Optimization",
-              desc: "Identify missing keywords that bots are looking for."
-            }
-          ].map((feature, i) => (
-            <div key={i} className="p-4 rounded-xl bg-white/5 border border-white/5 hover:border-white/10 transition-all duration-300 group">
-              <h3 className="text-sm font-semibold text-white mb-1">{feature.title}</h3>
-              <p className="text-xs text-white/50 leading-relaxed">{feature.desc}</p>
+            { title: "75% of resumes rejected", desc: "Most applications never reach a human. Our AI ensures yours does." },
+            { title: "6 seconds to impress", desc: "That's how long recruiters spend on initial screening. Make every word count." },
+            { title: "2x more interviews", desc: "Users who optimize with Resumate report double the callback rate." }
+          ].map((insight, i) => (
+            <div key={i} className="p-4 rounded-lg bg-white/[0.02] border border-white/5 hover:border-white/10 transition-all">
+              <h3 className="text-xs font-medium text-white mb-1">{insight.title}</h3>
+              <p className="text-[11px] text-white/40 leading-relaxed">{insight.desc}</p>
             </div>
           ))}
         </div>
       )}
 
-      {/* Results Section - Keeping mostly same structure but cleaning up styles */}
+      {/* Results Section */}
       {evaluationResult && (
-        <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+        <div className="space-y-5 animate-fadeInUp">
           {/* Results Header */}
-          <div className="flex items-center justify-between bg-white/5 p-4 rounded-xl border border-white/10">
+          <div className="flex items-center justify-between bg-white/[0.02] p-4 rounded-lg border border-white/5">
             <div>
-              <p className="text-white/40 text-xs uppercase tracking-wider font-semibold">Target Risk</p>
-              <h2 className="text-xl font-bold text-white max-w-md truncate">{jobRole}</h2>
+              <p className="text-[10px] text-white/40 uppercase tracking-wider font-medium">Target Role</p>
+              <h2 className="text-base font-semibold text-white truncate max-w-xs">{jobRole}</h2>
             </div>
             <Button
               onClick={() => {
@@ -268,63 +265,65 @@ export default function CVEvaluationPage() {
                 setFile(null);
                 setProgress(0);
               }}
-              variant="outline"
-              className="border-white/20 text-white hover:bg-white/10 gap-2"
+              variant="ghost"
+              className="text-white/50 hover:text-white hover:bg-white/5 h-8 px-4 text-xs"
             >
-              Scan Another Resume
+              Scan Another
             </Button>
           </div>
 
           {/* Score Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-3 gap-4">
             {/* Overall Score */}
-            <Card className="col-span-1 md:col-span-1 bg-black/40 border-white/10 relative overflow-hidden">
-              <div className="absolute top-0 right-0 p-32 bg-indigo-500/10 blur-[80px] rounded-full pointer-events-none" />
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium text-white/60">Match Score</CardTitle>
+            <Card className={`border ${getScoreBgColor(evaluationResult.overallScore)}`}>
+              <CardHeader className="pb-2 pt-4 px-4">
+                <CardTitle className="text-[10px] font-medium text-white/60">Match Score</CardTitle>
               </CardHeader>
-              <CardContent>
-                <div className="flex items-end gap-3">
-                  <span className={`text-6xl font-bold tracking-tighter ${getScoreColor(evaluationResult.overallScore)}`}>
+              <CardContent className="px-4 pb-4">
+                <div className="flex items-end gap-1.5">
+                  <span className={`text-4xl font-bold tracking-tight ${getScoreColor(evaluationResult.overallScore)}`}>
                     {evaluationResult.overallScore}
                   </span>
-                  <span className="text-xl text-white/40 mb-2">/100</span>
+                  <span className="text-sm text-white/40 mb-1">/100</span>
                 </div>
-                <div className="mt-4">
-                  <Badge
-                    variant="outline"
-                    className={`
-                        ${evaluationResult.isMatch
-                        ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
-                        : 'bg-amber-500/10 text-amber-400 border-amber-500/20'}
-                      `}
-                  >
-                    {evaluationResult.isMatch ? 'Strong Match' : 'Potentially Good Fit'}
-                  </Badge>
-                </div>
+                <Badge
+                  className={`mt-3 text-[10px] px-3 py-1 border ${evaluationResult.overallScore >= 70
+                    ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30'
+                    : evaluationResult.overallScore >= 50
+                      ? 'bg-amber-500/20 text-amber-400 border-amber-500/30'
+                      : 'bg-red-500/20 text-red-400 border-red-500/30'
+                    }`}
+                >
+                  {evaluationResult.overallScore >= 70 ? '✓ Strong Match' : evaluationResult.overallScore >= 50 ? '~ Good Fit' : '✗ Needs Work'}
+                </Badge>
               </CardContent>
             </Card>
 
             {/* Detailed Metrics */}
-            <Card className="col-span-1 md:col-span-2 bg-black/40 border-white/10">
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium text-white/60">Detailed Breakdown</CardTitle>
+            <Card className="col-span-2 bg-white/[0.02] border-white/5">
+              <CardHeader className="pb-2 pt-4 px-4">
+                <CardTitle className="text-[10px] font-medium text-white/40">Breakdown</CardTitle>
               </CardHeader>
-              <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4">
+              <CardContent className="grid grid-cols-2 gap-x-6 gap-y-3 px-4 pb-4">
                 {[
                   { label: 'Role Relevance', value: evaluationResult.roleRelevance },
                   { label: 'Skills Match', value: evaluationResult.skillsMatch },
-                  { label: 'Experience Impact', value: evaluationResult.experienceFit },
-                  { label: 'Education Alignment', value: evaluationResult.educationFit },
-                  { label: 'ATS Optimization', value: evaluationResult.atsKeywordMatch },
+                  { label: 'Experience', value: evaluationResult.experienceFit },
+                  { label: 'Education', value: evaluationResult.educationFit },
+                  { label: 'ATS Score', value: evaluationResult.atsKeywordMatch },
                   { label: 'Industry Fit', value: evaluationResult.industryAlignment },
                 ].map((metric) => (
-                  <div key={metric.label} className="space-y-1">
+                  <div key={metric.label} className="space-y-1.5">
                     <div className="flex justify-between text-xs">
-                      <span className="text-white/70">{metric.label}</span>
-                      <span className={getScoreColor(metric.value)}>{metric.value}%</span>
+                      <span className="text-white/60">{metric.label}</span>
+                      <span className={`font-medium ${getScoreColor(metric.value)}`}>{metric.value}%</span>
                     </div>
-                    <Progress value={metric.value} className="h-1.5 bg-white/5" />
+                    <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">
+                      <div
+                        className={`h-full rounded-full transition-all duration-500 ${getProgressColor(metric.value)}`}
+                        style={{ width: `${metric.value}%` }}
+                      />
+                    </div>
                   </div>
                 ))}
               </CardContent>
@@ -332,41 +331,41 @@ export default function CVEvaluationPage() {
           </div>
 
           {/* Skills & Analysis */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="grid grid-cols-2 gap-4">
             {/* Skills */}
-            <Card className="bg-black/40 border-white/10">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Target className="h-5 w-5 text-indigo-400" />
-                  Skills Analysis
+            <Card className="bg-white/[0.02] border-white/5">
+              <CardHeader className="pb-2 pt-4 px-4">
+                <CardTitle className="flex items-center gap-2 text-sm">
+                  <Target className="h-4 w-4 text-white/50" />
+                  Skills
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-6">
+              <CardContent className="space-y-4 px-4 pb-4">
                 <div>
-                  <h4 className="text-xs font-semibold uppercase text-emerald-500 mb-3">Matched Skills</h4>
-                  <div className="flex flex-wrap gap-2">
+                  <h4 className="text-[10px] uppercase tracking-wider font-semibold text-emerald-500/80 mb-2">Matched Skills</h4>
+                  <div className="flex flex-wrap gap-1.5">
                     {evaluationResult.matchedSkills.length > 0 ? (
-                      evaluationResult.matchedSkills.map((skill) => (
-                        <Badge key={skill} className="bg-emerald-500/10 text-emerald-400 border-emerald-500/20 hover:bg-emerald-500/20">
+                      evaluationResult.matchedSkills.slice(0, 8).map((skill) => (
+                        <Badge key={skill} className="bg-emerald-500/10 text-emerald-400 border-emerald-500/20 text-[10px] px-2 py-0.5">
                           {skill}
                         </Badge>
                       ))
                     ) : (
-                      <span className="text-white/30 text-sm">No direct skill matches found.</span>
+                      <span className="text-white/30 text-xs italic">No direct matches found</span>
                     )}
                   </div>
                 </div>
                 <div>
-                  <h4 className="text-xs font-semibold uppercase text-amber-500 mb-3">Missing Critical Skills</h4>
-                  <div className="flex flex-wrap gap-2">
+                  <h4 className="text-[10px] uppercase tracking-wider font-semibold text-amber-500/80 mb-2">Missing Skills</h4>
+                  <div className="flex flex-wrap gap-1.5">
                     {evaluationResult.missingSkills.length > 0 ? (
-                      evaluationResult.missingSkills.map((skill) => (
-                        <Badge key={skill} variant="outline" className="border-amber-500/30 text-amber-400">
+                      evaluationResult.missingSkills.slice(0, 8).map((skill) => (
+                        <Badge key={skill} variant="outline" className="bg-amber-500/5 border-amber-500/20 text-amber-400/80 text-[10px] px-2 py-0.5">
                           {skill}
                         </Badge>
                       ))
                     ) : (
-                      <span className="text-white/30 text-sm">No critical skills missing!</span>
+                      <span className="text-white/30 text-xs italic">No skills missing</span>
                     )}
                   </div>
                 </div>
@@ -374,32 +373,32 @@ export default function CVEvaluationPage() {
             </Card>
 
             {/* Strengths & Weaknesses */}
-            <Card className="bg-black/40 border-white/10">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <FileText className="h-5 w-5 text-purple-400" />
-                  Qualitative Review
+            <Card className="bg-white/[0.02] border-white/5">
+              <CardHeader className="pb-2 pt-4 px-4">
+                <CardTitle className="flex items-center gap-2 text-sm">
+                  <FileText className="h-4 w-4 text-white/50" />
+                  Review
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-6">
+              <CardContent className="space-y-4 px-4 pb-4">
                 <div>
-                  <h4 className="text-xs font-semibold uppercase text-white/50 mb-3">Key Strengths</h4>
+                  <h4 className="text-[10px] uppercase tracking-wider font-semibold text-white/40 mb-2">Strengths</h4>
                   <ul className="space-y-2">
-                    {evaluationResult.strengths.map((strength, idx) => (
-                      <li key={idx} className="flex gap-3 text-sm text-white/80">
-                        <CheckCircle className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" />
-                        <span>{strength}</span>
+                    {evaluationResult.strengths.slice(0, 3).map((strength, idx) => (
+                      <li key={idx} className="flex gap-2.5 text-xs text-white/70">
+                        <CheckCircle className="h-4 w-4 text-emerald-500 shrink-0" />
+                        <span className="leading-snug">{strength}</span>
                       </li>
                     ))}
                   </ul>
                 </div>
                 <div>
-                  <h4 className="text-xs font-semibold uppercase text-white/50 mb-3">Improvement Areas</h4>
+                  <h4 className="text-[10px] uppercase tracking-wider font-semibold text-white/40 mb-2">Critical Improvements</h4>
                   <ul className="space-y-2">
-                    {evaluationResult.weaknesses.map((weakness, idx) => (
-                      <li key={idx} className="flex gap-3 text-sm text-white/80">
-                        <AlertCircle className="h-4 w-4 text-amber-500 shrink-0 mt-0.5" />
-                        <span>{weakness}</span>
+                    {evaluationResult.weaknesses.slice(0, 3).map((weakness, idx) => (
+                      <li key={idx} className="flex gap-2.5 text-xs text-white/70">
+                        <AlertCircle className="h-4 w-4 text-red-500 shrink-0" />
+                        <span className="leading-snug">{weakness}</span>
                       </li>
                     ))}
                   </ul>
@@ -408,22 +407,22 @@ export default function CVEvaluationPage() {
             </Card>
           </div>
 
-          {/* Key Suggestions */}
-          <Card className="bg-indigo-500/5 border-indigo-500/20">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Sparkles className="h-5 w-5 text-indigo-400" />
-                AI Recommendations
+          {/* Recommendations */}
+          <Card className="bg-white/[0.02] border-white/5">
+            <CardHeader className="pb-2 pt-4 px-4">
+              <CardTitle className="flex items-center gap-2 text-sm">
+                <Sparkles className="h-4 w-4 text-white/50" />
+                Recommendations
               </CardTitle>
             </CardHeader>
-            <CardContent>
-              <ol className="space-y-3">
-                {evaluationResult.recommendations.map((rec, idx) => (
-                  <li key={idx} className="flex gap-3 text-sm text-white/90 p-3 rounded-lg bg-black/20 border border-white/5">
-                    <span className="flex items-center justify-center w-6 h-6 rounded-full bg-indigo-500/20 text-indigo-300 text-xs font-bold shrink-0">
+            <CardContent className="px-4 pb-4">
+              <ol className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                {evaluationResult.recommendations.slice(0, 4).map((rec, idx) => (
+                  <li key={idx} className="flex gap-3 text-xs text-white/70 p-3 rounded-lg bg-white/[0.03] border border-white/5 hover:border-amber-500/20 hover:bg-amber-500/5 transition-all group">
+                    <span className="flex items-center justify-center w-6 h-6 rounded-full bg-amber-500/10 text-amber-500 text-[11px] font-bold shrink-0 group-hover:bg-amber-500/20">
                       {idx + 1}
                     </span>
-                    <span>{rec}</span>
+                    <span className="leading-relaxed">{rec}</span>
                   </li>
                 ))}
               </ol>
@@ -431,9 +430,9 @@ export default function CVEvaluationPage() {
           </Card>
 
           {/* Summary */}
-          <div className="p-6 rounded-xl bg-white/5 border border-white/10">
-            <h3 className="text-lg font-semibold text-white mb-2">Executive Summary</h3>
-            <p className="text-white/70 leading-relaxed text-sm">{evaluationResult.summary}</p>
+          <div className="p-4 rounded-lg bg-white/[0.02] border border-white/5">
+            <h3 className="text-sm font-medium text-white mb-2">Summary</h3>
+            <p className="text-white/50 text-xs leading-relaxed">{evaluationResult.summary}</p>
           </div>
         </div>
       )}

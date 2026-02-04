@@ -91,7 +91,12 @@ async function extractTextFromPDF(buffer: Buffer): Promise<string> {
                 if (textItem.R && Array.isArray(textItem.R)) {
                   textItem.R.forEach((r: any) => {
                     if (r.T) {
-                      text += decodeURIComponent(r.T) + ' ';
+                      try {
+                        text += decodeURIComponent(r.T) + ' ';
+                      } catch (e) {
+                        // Fallback to raw text if URI is malformed
+                        text += r.T + ' ';
+                      }
                     }
                   });
                 }
@@ -374,7 +379,7 @@ export async function POST(request: NextRequest) {
     if (file!.type === 'application/pdf') {
       cvText = await extractTextFromPDF(buffer);
     } else if (file!.type === 'application/msword' ||
-               file!.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
+      file!.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
       cvText = await extractTextFromDOCX(buffer);
     } else {
       throw new ValidationError('Unsupported file type');
@@ -399,8 +404,8 @@ export async function POST(request: NextRequest) {
 
     const status =
       err instanceof ValidationError ? 400 :
-      err instanceof FileProcessingError ? 422 :
-      err instanceof AIEvaluationError ? 500 : 500;
+        err instanceof FileProcessingError ? 422 :
+          err instanceof AIEvaluationError ? 500 : 500;
 
     const message = err instanceof Error ? err.message : 'Unknown error';
 

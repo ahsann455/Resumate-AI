@@ -7,58 +7,53 @@ export default function HowItWorksPage() {
         {
             step: "01",
             title: "Upload Your Resume",
-            description: "Drag and drop your existing resume in PDF or DOCX format. We value your privacy—files are processed securely and never shared with third parties."
+            description: "Drag and drop your resume in PDF or DOCX. Files are processed securely."
         },
         {
             step: "02",
             title: "Target Your Role",
-            description: "Paste the job description of the position you're aiming for. This allows our AI to contextually analyze your profile against specific requirements."
+            description: "Enter the job title you're aiming for to enable contextual analysis."
         },
         {
             step: "03",
             title: "Deep Analysis",
-            description: "Our engine scans for ATS compatibility, keyword matches, formatting issues, and soft skill indicators. It simulates how a recruiter reads your CV."
+            description: "Our AI scans for ATS compatibility, keywords, formatting, and skill indicators."
         },
         {
             step: "04",
-            title: "Actionable Optimization",
-            description: "Receive a scored report with clear, step-by-step instructions on what to fix. From 'add this keyword' to 'rewrite this bullet point', we guide every edit."
+            title: "Get Recommendations",
+            description: "Receive a scored report with clear, actionable steps to improve."
         }
     ];
 
     return (
         <SEOPageWrapper
             title="How It Works"
-            description="See the simple 4-step process to optimizing your resume with AI."
+            description="Simple 4-step process to optimizing your resume."
         >
-            <div className="max-w-4xl mx-auto space-y-10">
+            <div className="max-w-xl mx-auto space-y-8">
 
-                {/* Header */}
-                <div className="space-y-3 text-left">
-                    <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-white">
-                        From Upload to <br />
-                        <span className="text-white/40">Interview Ready.</span>
-                    </h1>
-                    <p className="text-xs text-white/60 max-w-2xl leading-relaxed">
-                        Complexity, simplified. We've distilled the resume optimization process into four intuitive steps.
+                <div className="space-y-3">
+                    <h2>From Upload to Interview Ready</h2>
+                    <p>
+                        We've distilled resume optimization into four intuitive steps.
                     </p>
                 </div>
 
-                {/* Steps */}
                 <div className="space-y-4">
                     {steps.map((item, index) => (
                         <div
                             key={index}
-                            className="group flex flex-col md:flex-row gap-4 md:gap-6 items-start pt-4 border-t border-white/10"
+                            className="group flex gap-4 items-start p-4 border-l-2 border-white/10 hover:border-white/30 transition-colors"
                         >
-                            <span className="text-[10px] font-mono text-white/40 pt-1 group-hover:text-white transition-colors duration-300">
+                            <span className="text-xs font-mono text-white/30 pt-0.5">
                                 {item.step}
                             </span>
-                            <div className="space-y-1 max-w-xl">
-                                <h3 className="text-sm font-bold text-white group-hover:text-white/90">
+                            <div className="space-y-1">
+                                <h3 className="text-xs font-semibold text-white">
                                     {item.title}
                                 </h3>
-                                <p className="text-xs text-white/60 leading-relaxed">
+                                <p className="text-[11px] text-white/50 leading-relaxed">
                                     {item.description}
                                 </p>
                             </div>
@@ -66,11 +61,10 @@ export default function HowItWorksPage() {
                     ))}
                 </div>
 
-                {/* CTA */}
-                <div className="pt-8">
-                    <Button asChild className="bg-white text-black hover:bg-white/90 h-12 px-8 text-sm font-bold w-full md:w-auto">
+                <div className="pt-6">
+                    <Button asChild className="bg-white text-black hover:bg-white/90 h-9 px-5 text-xs font-semibold">
                         <Link href="/">
-                            Start the Process
+                            Start Now
                         </Link>
                     </Button>
                 </div>
